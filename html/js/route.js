@@ -322,11 +322,11 @@ var Route =
     * @param callback пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     **/
     
-    getNotConnectedRoads: function(start, callback){
-		var start = [start.lat, start.lng];
-		var params = 'data=' + JSON.stringify([start]);
+    getNearest: function(start, callback){
+		var db_file = selectRegion.value;
+		var params = 'data=' + [start.lat,start.lng,db_file].join(',')
 		console.log(params);
-		Ajax.sendRequest('GET', '/findnotconnected', params, function(result) {
+		Ajax.sendRequest('GET', 'http://py_spa.loc/nearest', params, function(result) {
 			//console.log(JSON.stringify(result));
             callback(result);
 		});

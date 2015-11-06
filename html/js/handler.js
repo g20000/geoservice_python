@@ -11,12 +11,22 @@ var radius = 0.01; //радиус действия полка
 var restr_nodes = []; //массив кругов запрещенных узлов
 var readySpatialite = false //флаг готовности модуля spatialite
 var zoom = 13; //масштаб карты
+var nearestPoint = null; //маркер ближайшей точки
+var nearest = null;//объект ближайшей точки
+
+var nearestIcon = L.icon({
+    iconUrl: 'img/nearest.jpg',
+    iconRetinaUrl: 'img/nearest.jpg',
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+    popupAnchor: [12, 12]
+});
 
 /**
 * установка начальной и конечной точек на карте
 **/
 map.on('click',function(e){
-	/*if (getRadio() == 'route'){*/
+	if (getRadio() == 'route'){
 		if ( start == null ){
 			start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
 			//startPoint = L.circle(L.latLng(start.lat,start.lng),5,{color:'red'}).addTo(map);
@@ -47,23 +57,25 @@ map.on('click',function(e){
 			end = null;
 			route_line.setLatLngs(dots2latlngs([]));
 		}
-/*	}else{
+	}else{
 		start = null;
 		end = null;
+		nearest = null;
 		route_line.setLatLngs(dots2latlngs([]));
 		if ( startPoint != null ) map.removeLayer(startPoint);
 		if ( endPoint != null ) map.removeLayer(endPoint);
+		if (nearestPoint != null) map.removeLayer(nearestPoint);
 		start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
 		startPoint = L.marker(L.latLng(start.lat,start.lng), {draggable:true}).addTo(map);
-		clearAllNodes();
-		clearAllRoads();
-		showNotConnected(start);
+		//clearAllNodes();
+		//clearAllRoads();
+		showNearest(start);
 		startPoint.on('dragend',function(e){
 			start.lat = startPoint.getLatLng().lat;
 			start.lng = startPoint.getLatLng().lng;
-			showNotConnected(start);
+			showNearest(start);
 		});
-	}	*/	
+	}		
 });
 
 
@@ -252,7 +264,7 @@ var mapCenter =
 * Получение значение радио переключателя вида задачи
 * @return значение
 **/
-/*
+
 function getRadio(){
     var inputs = document.getElementsByTagName('input');
     for ( var i = 0; i < inputs.length; i++ ){
@@ -262,21 +274,17 @@ function getRadio(){
     }
     return null;
 }
-*/
+
 /**
 * проверка связности графа волновым методом
 * вывод несвязной части графа путей
 * @param start начальная точка распостранения волны {lat:lat, lng:lng, radius:radius}
 **/
-/*
-function showNotConnected(start){
-	if (!readySpatialite){
-		alert('Модуль spatialite не готов!');
-		return;
-	}
+
+function showNearest(start){
 	showElem(preloader);
 	Time.start();
-	Route.getNotConnectedRoads(start, function(result){
+	Route.getNearest(start, function(result){
 		hideElem(preloader);
 		time.textContent = Time.stop() + ' мс';
 		time.innerText = Time.stop() + ' мс';
@@ -284,9 +292,7 @@ function showNotConnected(start){
 		if ( result == null ){
 			alert('Result fail');
 		}
-		for ( var i = 0; i < result.length; i++ ){
-			roads.push(L.polyline(dots2latlngs(result[i]),{color:'green'}).addTo(map));
-		}
+		nearest = {lat:result.coordinates[1],lng:result.coordinates[0]}
+		nearestPoint = L.marker(L.latLng(nearest.lat,nearest.lng), {draggable:true,icon:nearestIcon}).addTo(map);
 	})
 }
-*/
