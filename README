@@ -76,7 +76,7 @@ API
 	
 	Запрос на поиск ближайшего узла
 		GET
-		http://server.name/nearest?data=lat_point,lng_point,lat_target,db_filename
+		http://server.name/nearest?data=lat_point,lng_point,db_filename
 		
 		Пример: http://py_spa.loc/nearest?data=56.62,47.728765,RU-ME.osm.sqlite
 		
