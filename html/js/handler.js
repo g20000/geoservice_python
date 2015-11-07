@@ -13,6 +13,8 @@ var readySpatialite = false //флаг готовности модуля spatial
 var zoom = 13; //масштаб карты
 var nearestPoint = null; //маркер ближайшей точки
 var nearest = null;//объект ближайшей точки
+var point = null;//объект произвольной точки
+var pointPoint = null;//маркер произвольной точки
 
 var nearestIcon = L.icon({
     iconUrl: 'img/nearest.jpg',
@@ -27,6 +29,10 @@ var nearestIcon = L.icon({
 **/
 map.on('click',function(e){
 	if (getRadio() == 'route'){
+		if (nearestPoint != null) map.removeLayer(nearestPoint);
+		if (pointPoint != null) map.removeLayer(pointPoint);
+		nearestPoint = null;
+		point = null;
 		if ( start == null ){
 			start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
 			//startPoint = L.circle(L.latLng(start.lat,start.lng),5,{color:'red'}).addTo(map);
@@ -47,12 +53,15 @@ map.on('click',function(e){
 				showRoute(start, end, enemies);
 			});
 			showRoute(start, end, enemies);
-			
+			if (nearestPoint != null) map.removeLayer(nearestPoint);
+			nearestPoint = null;
+			nearest = null;
 		}else{
 			map.removeLayer(startPoint);
 			map.removeLayer(endPoint);
 			startPoint = null;
 			endPoint = null;
+			nearest = null;
 			start = null;
 			end = null;
 			route_line.setLatLngs(dots2latlngs([]));
@@ -61,19 +70,23 @@ map.on('click',function(e){
 		start = null;
 		end = null;
 		nearest = null;
+		point = null;
 		route_line.setLatLngs(dots2latlngs([]));
 		if ( startPoint != null ) map.removeLayer(startPoint);
 		if ( endPoint != null ) map.removeLayer(endPoint);
 		if (nearestPoint != null) map.removeLayer(nearestPoint);
-		start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-		startPoint = L.marker(L.latLng(start.lat,start.lng), {draggable:true}).addTo(map);
+		if (pointPoint != null) map.removeLayer(pointPoint);
+		point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+		pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
 		//clearAllNodes();
 		//clearAllRoads();
-		showNearest(start);
-		startPoint.on('dragend',function(e){
-			start.lat = startPoint.getLatLng().lat;
-			start.lng = startPoint.getLatLng().lng;
-			showNearest(start);
+		showNearest(point);
+		pointPoint.on('dragend',function(e){
+			point.lat = pointPoint.getLatLng().lat;
+			point.lng = pointPoint.getLatLng().lng;
+			if (nearestPoint != null) map.removeLayer(nearestPoint);
+			nearest = null;
+			showNearest(point);
 		});
 	}		
 });
@@ -198,6 +211,7 @@ function getRestrictedNodes(){
 /**
 * запрос маршрута у сервера и отображение маршрута на карте
 **/
+
 function showRoute(start,end, enemies){
 	
 	route_line.setLatLngs(dots2latlngs([]));
@@ -281,10 +295,10 @@ function getRadio(){
 * @param start начальная точка распостранения волны {lat:lat, lng:lng, radius:radius}
 **/
 
-function showNearest(start){
+function showNearest(point){
 	showElem(preloader);
 	Time.start();
-	Route.getNearest(start, function(result){
+	Route.getNearest(point, function(result){
 		hideElem(preloader);
 		time.textContent = Time.stop() + ' мс';
 		time.innerText = Time.stop() + ' мс';
