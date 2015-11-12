@@ -18,7 +18,13 @@
 	<script type="text/javascript" src="js/index.js"></script>
 </head>
     <body>
-		<h4 class="title">Карта для проверки сервиса маршрутов на Pyhon</h4>
+		<h4 class="title">
+			Карта для проверки сервиса маршрутов на 
+			<input type="radio" name="service" value="spatialite_python" checked/><label>Python</label>&nbsp;
+			<input type="radio" name="service" value="spatialite_php" /><label>PHP</label>&nbsp;
+			<input type="radio" name="service" value="spatialite_nodejs"/><label>NodeJs</label>&nbsp;
+			
+		</h4>
 		<div id="map-block"></div>
 		<div class="service">
 			<select class="select" id="region">

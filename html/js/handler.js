@@ -29,7 +29,7 @@ var nearestIcon = L.icon({
 * установка начальной и конечной точек на карте
 **/
 map.on('click',function(e){
-	if (getRadio() == 'route'){
+	if (getRadio('task') == 'route'){
 		if (nearestPoint != null) map.removeLayer(nearestPoint);
 		if (pointPoint != null) map.removeLayer(pointPoint);
 		nearestPoint = null;
@@ -214,7 +214,7 @@ function getRestrictedNodes(){
 **/
 
 function showRoute(start,end, enemies){
-	
+	Route.service = getRadio('service');
 	route_line.setLatLngs(dots2latlngs([]));
 	showElem(preloader);
 	Time.start();
@@ -277,13 +277,14 @@ var mapCenter =
 
 /**
 * Получение значение радио переключателя вида задачи
+* @param name атрибут name радиокнопки 
 * @return значение
 **/
 
-function getRadio(){
+function getRadio(name){
     var inputs = document.getElementsByTagName('input');
     for ( var i = 0; i < inputs.length; i++ ){
-        if ( inputs[i].attributes.name.value == 'task' )
+        if ( inputs[i].attributes.name.value == name )
             if ( inputs[i].attributes.type.value == 'radio' )
                 if( inputs[i].checked ) return inputs[i].value;
     }
@@ -297,6 +298,7 @@ function getRadio(){
 **/
 
 function showNearest(point){
+	Route.service = getRadio('service');
 	showElem(preloader);
 	Time.start();
 	Route.getNearest(point, function(result){
