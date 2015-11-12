@@ -15,6 +15,7 @@ var nearestPoint = null; //маркер ближайшей точки
 var nearest = null;//объект ближайшей точки
 var point = null;//объект произвольной точки
 var pointPoint = null;//маркер произвольной точки
+var scale = 4; //масштаб сетки (1/4 градуса)
 
 var nearestIcon = L.icon({
     iconUrl: 'img/nearest.jpg',

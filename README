@@ -82,6 +82,19 @@ API
 		
 		Пример ответа: {"type":"Point","coordinates":[47.7301384,56.6167473]}
 		
+Дополнения:
+	В связи с добавлением поддержки сетки в запросы в конце должен быть добавлен еще параметр "scale".
+	Величина scale равна 2**m, где m - параметр m в команде start_mkgrid.py
+	
+	т.е. если
+	./start_mkgrid.py -u -d /home/user1/game1/db -m 2
+	
+	то:
+	http://server.name/route?data=lat_source,lng_source,lat_target,lng_target,db_filename,4
+	http://server.name/nearest?data=lat_point,lng_point,db_filename,4
+	
+	
+		
 		
 	
 	

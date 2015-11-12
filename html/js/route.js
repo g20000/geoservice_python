@@ -161,9 +161,9 @@ var Route =
     getRouteSpatialitePython: function(start,end,callback){
 		var db_file = selectRegion.value;
 		var bounds = map.getBounds();
-		var params = 'data=' + [start.lat,start.lng,end.lat,end.lng,db_file,
-								bounds['_southWest'].lat,bounds['_southWest'].lng,
-								bounds['_northEast'].lat,bounds['_northEast'].lng].join(',');
+		var params = 'data=' + [start.lat,start.lng,end.lat,end.lng,db_file, scale].join(',');
+								//bounds['_southWest'].lat,bounds['_southWest'].lng,
+								//bounds['_northEast'].lat,bounds['_northEast'].lng].join(',');
 		console.log(params);
 		Ajax.sendRequest('GET', 'http://py_spa.loc/route', params, function(res) {
 			console.log(res.coordinates);
@@ -324,7 +324,7 @@ var Route =
     
     getNearest: function(start, callback){
 		var db_file = selectRegion.value;
-		var params = 'data=' + [start.lat,start.lng,db_file].join(',')
+		var params = 'data=' + [start.lat,start.lng,db_file,scale].join(',')
 		console.log(params);
 		Ajax.sendRequest('GET', 'http://py_spa.loc/nearest', params, function(result) {
 			//console.log(JSON.stringify(result));
