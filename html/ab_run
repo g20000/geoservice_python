@@ -1,1 +1,1 @@
-ab -n1000 -c100 -v2 -l http://py_spa.loc/myapp?data=56.62,47.728765,55.83,48.36,RU-ME.osm.sqlite
+ab -n1000 -c100 -v2 -l http://geoserver.py/myapp?data=56.62,47.728765,55.83,48.36,RU-ME.osm.sqlite
