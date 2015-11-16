@@ -272,7 +272,8 @@ var mapCenter =
 	"kosovo-latest.osm": [42.614833, 20.893836],
 	"mongolia-latest.osm": [47.773702, 106.427558],
 	"pakistan-latest.osm": [30.183729, 71.509366],
-	"ukraine-latest.osm": [50.350146, 30.633554]
+	"ukraine-latest.osm": [50.350146, 30.633554],
+	"germany-latest.osm.pbf.pbf": [50.350146, 30.633554]
 };
 
 /**
