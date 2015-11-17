@@ -51,7 +51,7 @@ var Route =
 		var params = 'data=' + [start.lat,start.lng,end.lat,end.lng,db_file, scale].join(',');
 								//bounds['_southWest'].lat,bounds['_southWest'].lng,
 								//bounds['_northEast'].lat,bounds['_northEast'].lng].join(',');
-		//console.log(params);
+		console.log(params);
 		Ajax.sendRequest('GET', 'http://py_spa.loc/route', params, function(res) {
 			//console.log(res.coordinates);
             callback(Route.reverse(res.coordinates));
