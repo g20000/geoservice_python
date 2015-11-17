@@ -15,7 +15,7 @@ OSM или PBF.
 
 3. Запустить скрипт start_osm_cut.py
 chmod +x start_osm_cut.py
-./start_osm-cut.py -f osm_or_pbf_file -t top -l left -b bottom -r right -d depth
+./start_osm_cut.py -f osm_or_pbf_file -t top -l left -b bottom -r right -d depth
 
 Файлы будут созданы в текущем каталоге 
 
