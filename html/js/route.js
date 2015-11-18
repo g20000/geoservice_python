@@ -33,7 +33,7 @@ var Route =
 		var db_file = selectRegion.value;
 		var params = 'data=' + [start.lat,start.lng,end.lat,end.lng,db_file,scale].join(',');
 		//console.log(params);
-		Ajax.sendRequest('GET', 'http://php_spa.loc/srv2.php', params, function(res) {
+		Ajax.sendRequest('GET', 'http://geoserver.py/srv2.php', params, function (res) {
 			//console.log(res.coordinates);
             callback(Route.reverse(res.coordinates));
 		});
@@ -52,7 +52,7 @@ var Route =
 								//bounds['_southWest'].lat,bounds['_southWest'].lng,
 								//bounds['_northEast'].lat,bounds['_northEast'].lng].join(',');
 		console.log(params);
-		Ajax.sendRequest('GET', 'http://py_spa.loc/route', params, function(res) {
+		Ajax.sendRequest('GET', 'http://geoserver.py/route', params, function (res) {
 			//console.log(res.coordinates);
             callback(Route.reverse(res.coordinates));
 		});
@@ -91,7 +91,7 @@ var Route =
 		var params = 'data=' + [start.lat,start.lng,db_file,scale].join(',')
 		//console.log(params);
 		if (Route.service == 'spatialite_python'){
-			var url = 'http://py_spa.loc/nearest';
+			var url = 'http://geoserver.py/nearest';
 		}else if( Route.service == 'spatialite_nodejs'){
 			var url = 'http://127.0.0.1:8000/nearest';
 		}
