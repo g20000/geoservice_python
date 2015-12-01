@@ -12,6 +12,7 @@ def application(environ, start_response):
 	status = '200 OK'
 	d = parse_qs(environ['QUERY_STRING'])
 	data = d['data'][0].split(',')
+	print data
 	start_lat = float(data[0])
 	start_lng = float(data[1])	
 	end_lat = float(data[2])
