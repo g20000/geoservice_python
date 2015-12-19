@@ -84,8 +84,8 @@ var Route =
 
 	
 	/**
-    * получение маршрута от сервиса на PHP
-    * @param start, end начальная и конечная точки в виде {lat:lat, lng:lng, radius:radius}
+    * получение узла, ближайшего к заданной точке
+    * @param start, end начальная и конечная точки в виде {lat:lat, lng:lng}
     * @param callback функция обратного вызова в которую передается результат
     **/
     
@@ -105,6 +105,23 @@ var Route =
             callback(result);
 		});
 	},
+    
+    /**
+    * определение принадлежности точки городу
+    * @param start заданная точка {lat:lat, lng:lng}
+    * @param callback функция обратного вызова в которую передается результат
+    **/
+    
+    getCity: function(start, callback){
+        var db_file = 'city.sqlite';
+        var params = 'data=' + [start.lat,start.lng,db_file].join(',');
+        console.log(params);
+        var url = Route.geoserver_py+'/incity';
+        console.log(url)
+        Ajax.sendRequest('GET', url, params, function(result) {
+            callback(result);
+        });
+    },
 	
 	/**
 	* обмен местами широты о долготы в массиве точек маршрута
