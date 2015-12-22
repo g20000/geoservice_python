@@ -36,7 +36,7 @@ var Route =
 		var db_file = selectRegion.value;
 		var params = 'data=' + [start.lat,start.lng,end.lat,end.lng,db_file,scale].join(',');
 		//console.log(params);
-		Ajax.sendRequest('GET', Route.geoserver_php+'/srv2.php', params, function(res) {
+		Ajax.sendRequest('GET', Route.geoserver_php + '/srv2.php', params, function (res) {
 			//console.log(res.coordinates);
             callback(Route.reverse(res.coordinates));
 		});
@@ -55,7 +55,7 @@ var Route =
 								//bounds['_southWest'].lat,bounds['_southWest'].lng,
 								//bounds['_northEast'].lat,bounds['_northEast'].lng].join(',');
 		console.log(params);
-		Ajax.sendRequest('GET', Route.geoserver_py+'/route', params, function(res) {
+		Ajax.sendRequest('GET', Route.geoserver_py + '/route', params, function (res) {
 			//console.log(res.coordinates);
             callback(Route.reverse(res.coordinates));
 		});
@@ -74,7 +74,7 @@ var Route =
 								//bounds['_southWest'].lat,bounds['_southWest'].lng,
 								//bounds['_northEast'].lat,bounds['_northEast'].lng].join(',');
 		console.log(params);
-		Ajax.sendRequest('GET', Route.geoserver_node+'/route', params, function(route) {
+		Ajax.sendRequest('GET', Route.geoserver_node + '/route', params, function (route) {
 			console.log(route);
             callback(Route.reverse(route));
 		});
@@ -84,8 +84,8 @@ var Route =
 
 	
 	/**
-    * получение узла, ближайшего к заданной точке
-    * @param start, end начальная и конечная точки в виде {lat:lat, lng:lng}
+	 * получение узла, ближайшего к заданной точке
+	 * @param start, end начальная и конечная точки в виде {lat:lat, lng:lng}
     * @param callback функция обратного вызова в которую передается результат
     **/
     
@@ -94,9 +94,9 @@ var Route =
 		var params = 'data=' + [start.lat,start.lng,db_file,scale].join(',')
 		//console.log(params);
 		if (Route.service == 'spatialite_python'){
-			var url = Route.geoserver_py+'/nearest';
+			var url = Route.geoserver_py + '/nearest';
 		}else if( Route.service == 'spatialite_nodejs'){
-			var url = Route.geoserver_node+'/nearest';
+			var url = Route.geoserver_node + '/nearest';
 		}
 		
 		
@@ -105,23 +105,23 @@ var Route =
             callback(result);
 		});
 	},
-    
-    /**
-    * определение принадлежности точки городу
-    * @param start заданная точка {lat:lat, lng:lng}
-    * @param callback функция обратного вызова в которую передается результат
-    **/
-    
-    getCity: function(start, callback){
-        var db_file = 'city.sqlite';
-        var params = 'data=' + [start.lat,start.lng,db_file].join(',');
-        console.log(params);
-        var url = Route.geoserver_py+'/incity';
-        console.log(url)
-        Ajax.sendRequest('GET', url, params, function(result) {
-            callback(result);
-        });
-    },
+
+	/**
+	 * определение принадлежности точки городу
+	 * @param start заданная точка {lat:lat, lng:lng}
+	 * @param callback функция обратного вызова в которую передается результат
+	 **/
+
+	getCity: function (start, callback) {
+		var db_file = 'city.sqlite';
+		var params = 'data=' + [start.lat, start.lng, db_file].join(',');
+		console.log(params);
+		var url = Route.geoserver_py + '/incity';
+		console.log(url)
+		Ajax.sendRequest('GET', url, params, function (result) {
+			callback(result);
+		});
+	},
 	
 	/**
 	* обмен местами широты о долготы в массиве точек маршрута

@@ -6,8 +6,8 @@ window.onload = function(){
 	selectRegion.onchange = function(){
 		initSpatialite(selectRegion.value);
 	};
-	
-	
+
+
 	var preloader = document.getElementById('preloader');
 	var time = document.getElementById('time');
 	

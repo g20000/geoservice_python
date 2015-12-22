@@ -31,7 +31,7 @@ var nearestIcon = L.icon({
 **/
 map.on('click',function(e){
 	if (getRadio('task') == 'route'){
-        if (city != null){
+        if (city != null) {
             map.removeLayer(city);
             city = null;
         }
@@ -39,21 +39,21 @@ map.on('click',function(e){
         if (pointPoint != null) map.removeLayer(pointPoint);
         nearestPoint = null;
         point = null;
-        if ( start == null ){
-            start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+        if (start == null) {
+            start = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
             //startPoint = L.circle(L.latLng(start.lat,start.lng),5,{color:'red'}).addTo(map);
-            startPoint = L.marker(L.latLng(start.lat,start.lng), {draggable:true}).addTo(map);
-            startPoint.on('dragend',function(e){
+            startPoint = L.marker(L.latLng(start.lat, start.lng), {draggable: true}).addTo(map);
+            startPoint.on('dragend', function (e) {
                 start.lat = startPoint.getLatLng().lat;
                 start.lng = startPoint.getLatLng().lng;
                 showRoute(start, end, enemies);
             });
-        }else if ( end == null ){
-            end = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+        } else if (end == null) {
+            end = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
             //endPoint = L.circle(L.latLng(end.lat,end.lng),5,{color:'blue'}).addTo(map);
             //alert('route request:'+JSON.stringify(start)+':'+JSON.stringify(end));
-            endPoint = L.marker(L.latLng(end.lat,end.lng), { draggable:true}).addTo(map);
-            endPoint.on('dragend',function(e){
+            endPoint = L.marker(L.latLng(end.lat, end.lng), {draggable: true}).addTo(map);
+            endPoint.on('dragend', function (e) {
                 end.lat = endPoint.getLatLng().lat;
                 end.lng = endPoint.getLatLng().lng;
                 showRoute(start, end, enemies);
@@ -62,7 +62,7 @@ map.on('click',function(e){
             if (nearestPoint != null) map.removeLayer(nearestPoint);
             nearestPoint = null;
             nearest = null;
-        }else{
+        } else {
             map.removeLayer(startPoint);
             map.removeLayer(endPoint);
             startPoint = null;
@@ -73,49 +73,49 @@ map.on('click',function(e){
             route_line.setLatLngs(dots2latlngs([]));
         }
     }
-    else if (getRadio('task') == 'city'){
+    else if (getRadio('task') == 'city') {
         start = null;
         end = null;
         nearest = null;
         point = null;
         route_line.setLatLngs(dots2latlngs([]));
-        if ( startPoint != null ) map.removeLayer(startPoint);
-        if ( endPoint != null ) map.removeLayer(endPoint);
+        if (startPoint != null) map.removeLayer(startPoint);
+        if (endPoint != null) map.removeLayer(endPoint);
         if (nearestPoint != null) map.removeLayer(nearestPoint);
         if (pointPoint != null) map.removeLayer(pointPoint);
-        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        point = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+        pointPoint = L.marker(L.latLng(point.lat, point.lng), {draggable: true}).addTo(map);
         //clearAllNodes();
         //clearAllRoads();
         showCity(point);
-        pointPoint.on('dragend',function(e){
+        pointPoint.on('dragend', function (e) {
             point.lat = pointPoint.getLatLng().lat;
             point.lng = pointPoint.getLatLng().lng;
             if (nearestPoint != null) map.removeLayer(nearestPoint);
             nearest = null;
             showCity(point);
         });
-        
-    }else{
+
+    } else {
         start = null;
         end = null;
         nearest = null;
         point = null;
-        if (city != null){
+        if (city != null) {
             map.removeLayer(city);
             city = null;
         }
         route_line.setLatLngs(dots2latlngs([]));
-        if ( startPoint != null ) map.removeLayer(startPoint);
-        if ( endPoint != null ) map.removeLayer(endPoint);
+        if (startPoint != null) map.removeLayer(startPoint);
+        if (endPoint != null) map.removeLayer(endPoint);
         if (nearestPoint != null) map.removeLayer(nearestPoint);
         if (pointPoint != null) map.removeLayer(pointPoint);
-        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        point = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+        pointPoint = L.marker(L.latLng(point.lat, point.lng), {draggable: true}).addTo(map);
         //clearAllNodes();
         //clearAllRoads();
         showNearest(point);
-        pointPoint.on('dragend',function(e){
+        pointPoint.on('dragend', function (e) {
             point.lat = pointPoint.getLatLng().lat;
             point.lng = pointPoint.getLatLng().lng;
             if (nearestPoint != null) map.removeLayer(nearestPoint);
@@ -144,9 +144,6 @@ function dots2latlngs(dots){
 	for ( var i = 0; i < dots.length; i++ ) latlngs.push(L.latLng(dots[i][0],dots[i][1]));
 	return latlngs;
 }//end func
-
-
-
 
 
 /**
@@ -233,8 +230,8 @@ function getRadio(name){
 }
 
 /**
-* получение координаи узла графа, ближайшего к заданной точке 
-* @param point заданная точка {lat:lat, lng:lng}
+ * получение координаи узла графа, ближайшего к заданной точке
+ * @param point заданная точка {lat:lat, lng:lng}
 **/
 
 function showNearest(point){
@@ -255,32 +252,32 @@ function showNearest(point){
 }
 
 /**
-* определение принадлежности заданной точки к городу 
-* @param point заданная точка {lat:lat, lng:lng}
-**/
+ * определение принадлежности заданной точки к городу
+ * @param point заданная точка {lat:lat, lng:lng}
+ **/
 
-function showCity(point){
+function showCity(point) {
     showElem(preloader);
     Time.start();
-    Route.getCity(point, function(result){
+    Route.getCity(point, function (result) {
         hideElem(preloader);
         time.textContent = Time.stop() + ' мс';
         time.innerText = Time.stop() + ' мс';
         //console.log(JSON.stringify(result));
-        if ( result.incity == true ){
+        if (result.incity == true) {
             alert([result.city_name, result.city_lastname].join(","))
-            if (city != null){
+            if (city != null) {
                 map.removeLayer(city);
                 city = null;
             }
             city = L.geoJson(result.city_geometry).addTo(map);
-        }else{
+        } else {
             alert('Point is not in city');
-            if (city != null){
+            if (city != null) {
                 map.removeLayer(city);
                 city = null;
             }
         }
-        
+
     });
 }

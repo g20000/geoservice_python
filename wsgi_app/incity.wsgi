@@ -5,7 +5,7 @@ import time
 import os
 import math
 
-DB_DIR = '/home/user1/game1/db/'
+DB_DIR = '/var/www/cityboundary/'
 
 
 def application(environ, start_response):

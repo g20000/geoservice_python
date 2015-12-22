@@ -54,34 +54,34 @@ var Ajax =
             XMLHttp.send(null);
         }
     },
-    
+
     /**
-    * отправка запроса
-    * @param method метод запроса
-    * @param url
-    * @param params
-    * callback  
-    **/
-    sendRequestRaw: function(method, url, params, callback){
+     * отправка запроса
+     * @param method метод запроса
+     * @param url
+     * @param params
+     * callback
+     **/
+    sendRequestRaw: function (method, url, params, callback) {
         XMLHttp = Ajax.getXMLHttp();
-        if( method == 'GET' || method == 'get' ){
+        if (method == 'GET' || method == 'get') {
             url += '?' + params;
         }
         XMLHttp.open(method, url, true);
-        XMLHttp.onreadystatechange = function(){
-            if ( XMLHttp.readyState == 4 ){
-                if ( XMLHttp.status == 200 ){
+        XMLHttp.onreadystatechange = function () {
+            if (XMLHttp.readyState == 4) {
+                if (XMLHttp.status == 200) {
                     callback(XMLHttp.responseText);
                 }
-                else{
+                else {
                     callback(null);
                 }
             }
         };
-        if( method == 'POST' || method == 'post' ){
+        if (method == 'POST' || method == 'post') {
             XMLHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             XMLHttp.send(params);
-        }else{
+        } else {
             XMLHttp.send(null);
         }
     }
