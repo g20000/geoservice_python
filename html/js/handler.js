@@ -16,6 +16,7 @@ var nearest = null;//объект ближайшей точки
 var point = null;//объект произвольной точки
 var pointPoint = null;//маркер произвольной точки
 var scale = 4; //масштаб сетки (1/4 градуса)
+var city = null; //мультиполигон города
 
 var nearestIcon = L.icon({
     iconUrl: 'img/nearest.jpg',
@@ -30,71 +31,99 @@ var nearestIcon = L.icon({
 **/
 map.on('click',function(e){
 	if (getRadio('task') == 'route'){
-		if (nearestPoint != null) map.removeLayer(nearestPoint);
-		if (pointPoint != null) map.removeLayer(pointPoint);
-		nearestPoint = null;
-		point = null;
-		if ( start == null ){
-			start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-			//startPoint = L.circle(L.latLng(start.lat,start.lng),5,{color:'red'}).addTo(map);
-			startPoint = L.marker(L.latLng(start.lat,start.lng), {draggable:true}).addTo(map);
-			startPoint.on('dragend',function(e){
-				start.lat = startPoint.getLatLng().lat;
-				start.lng = startPoint.getLatLng().lng;
-				showRoute(start, end, enemies);
-			});
-		}else if ( end == null ){
-			end = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-			//endPoint = L.circle(L.latLng(end.lat,end.lng),5,{color:'blue'}).addTo(map);
-			//alert('route request:'+JSON.stringify(start)+':'+JSON.stringify(end));
-			endPoint = L.marker(L.latLng(end.lat,end.lng), { draggable:true}).addTo(map);
-			endPoint.on('dragend',function(e){
-				end.lat = endPoint.getLatLng().lat;
-				end.lng = endPoint.getLatLng().lng;
-				showRoute(start, end, enemies);
-			});
-			showRoute(start, end, enemies);
-			if (nearestPoint != null) map.removeLayer(nearestPoint);
-			nearestPoint = null;
-			nearest = null;
-		}else{
-			map.removeLayer(startPoint);
-			map.removeLayer(endPoint);
-			startPoint = null;
-			endPoint = null;
-			nearest = null;
-			start = null;
-			end = null;
-			route_line.setLatLngs(dots2latlngs([]));
-		}
-	}else{
-		start = null;
-		end = null;
-		nearest = null;
-		point = null;
-		route_line.setLatLngs(dots2latlngs([]));
-		if ( startPoint != null ) map.removeLayer(startPoint);
-		if ( endPoint != null ) map.removeLayer(endPoint);
-		if (nearestPoint != null) map.removeLayer(nearestPoint);
-		if (pointPoint != null) map.removeLayer(pointPoint);
-		point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-		pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
-		//clearAllNodes();
-		//clearAllRoads();
-		showNearest(point);
-		pointPoint.on('dragend',function(e){
-			point.lat = pointPoint.getLatLng().lat;
-			point.lng = pointPoint.getLatLng().lng;
-			if (nearestPoint != null) map.removeLayer(nearestPoint);
-			nearest = null;
-			showNearest(point);
-		});
-	}		
+        if (city != null){
+            map.removeLayer(city);
+            city = null;
+        }
+        if (nearestPoint != null) map.removeLayer(nearestPoint);
+        if (pointPoint != null) map.removeLayer(pointPoint);
+        nearestPoint = null;
+        point = null;
+        if ( start == null ){
+            start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+            //startPoint = L.circle(L.latLng(start.lat,start.lng),5,{color:'red'}).addTo(map);
+            startPoint = L.marker(L.latLng(start.lat,start.lng), {draggable:true}).addTo(map);
+            startPoint.on('dragend',function(e){
+                start.lat = startPoint.getLatLng().lat;
+                start.lng = startPoint.getLatLng().lng;
+                showRoute(start, end, enemies);
+            });
+        }else if ( end == null ){
+            end = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+            //endPoint = L.circle(L.latLng(end.lat,end.lng),5,{color:'blue'}).addTo(map);
+            //alert('route request:'+JSON.stringify(start)+':'+JSON.stringify(end));
+            endPoint = L.marker(L.latLng(end.lat,end.lng), { draggable:true}).addTo(map);
+            endPoint.on('dragend',function(e){
+                end.lat = endPoint.getLatLng().lat;
+                end.lng = endPoint.getLatLng().lng;
+                showRoute(start, end, enemies);
+            });
+            showRoute(start, end, enemies);
+            if (nearestPoint != null) map.removeLayer(nearestPoint);
+            nearestPoint = null;
+            nearest = null;
+        }else{
+            map.removeLayer(startPoint);
+            map.removeLayer(endPoint);
+            startPoint = null;
+            endPoint = null;
+            nearest = null;
+            start = null;
+            end = null;
+            route_line.setLatLngs(dots2latlngs([]));
+        }
+    }
+    else if (getRadio('task') == 'city'){
+        start = null;
+        end = null;
+        nearest = null;
+        point = null;
+        route_line.setLatLngs(dots2latlngs([]));
+        if ( startPoint != null ) map.removeLayer(startPoint);
+        if ( endPoint != null ) map.removeLayer(endPoint);
+        if (nearestPoint != null) map.removeLayer(nearestPoint);
+        if (pointPoint != null) map.removeLayer(pointPoint);
+        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        //clearAllNodes();
+        //clearAllRoads();
+        showCity(point);
+        pointPoint.on('dragend',function(e){
+            point.lat = pointPoint.getLatLng().lat;
+            point.lng = pointPoint.getLatLng().lng;
+            if (nearestPoint != null) map.removeLayer(nearestPoint);
+            nearest = null;
+            showCity(point);
+        });
+        
+    }else{
+        start = null;
+        end = null;
+        nearest = null;
+        point = null;
+        if (city != null){
+            map.removeLayer(city);
+            city = null;
+        }
+        route_line.setLatLngs(dots2latlngs([]));
+        if ( startPoint != null ) map.removeLayer(startPoint);
+        if ( endPoint != null ) map.removeLayer(endPoint);
+        if (nearestPoint != null) map.removeLayer(nearestPoint);
+        if (pointPoint != null) map.removeLayer(pointPoint);
+        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        //clearAllNodes();
+        //clearAllRoads();
+        showNearest(point);
+        pointPoint.on('dragend',function(e){
+            point.lat = pointPoint.getLatLng().lat;
+            point.lng = pointPoint.getLatLng().lng;
+            if (nearestPoint != null) map.removeLayer(nearestPoint);
+            nearest = null;
+            showNearest(point);
+        });
+    }         
 });
-
-
-
-
 
 
 /**
@@ -116,99 +145,10 @@ function dots2latlngs(dots){
 	return latlngs;
 }//end func
 
-/**
-* запрос у сервера и отображение на карте всех дорог
-**/
-/*
-function getAllRoads(){
-	Ajax.sendRequest('GET','/allroads','a=1',function(r){
-		//console.log(JSON.stringify(r));
-		for ( var i = 0; i < r.length; i++ ){
-			roads.push(L.polyline(dots2latlngs(r[i]),{color:'green'}).addTo(map));
-		}
-	});
-}
-*/
-/**
-*  запрос у сервера и отображение на карте всех узлов
-**/
-/*
-function getAllNodes(){
-	Ajax.sendRequest('GET','/allnodes','a=1',function(n){
-		//console.log(JSON.stringify(n));
-		for ( var i = 0; i < n.length; i++ ){
-			nodes.push(L.circle(L.latLng(n[i][0],n[i][1]),5,{color:'yellow'}).addTo(map));
-		}
-	});
-}
-*/
-/**
-* удаление с карты выведенных дорог
-**/
-/*
-function clearAllRoads(){
-	while( roads.length != 0 ){
-		map.removeLayer(roads[0]);
-		delete roads[0];
-		roads.splice(0,1);
-	}
-}
-*/
-/**
-* удаление с карты выведенных узлов
-**/
-/*
-function clearAllNodes(){
-	while( nodes.length != 0 ){
-		map.removeLayer(nodes[0]);
-		delete nodes[0];
-		nodes.splice(0,1);
-	}
-}
-*/
-/**
-* отображение на карте вражеских полков
-**/
-/*
-function setEnemy(lat,lng,radius){
-	
-	enemyCircle.push(L.circle([lat,lng], radius * 111300, {color: '#f03', fillColor: '#f03', opacity: 0.1,fillOpacity:0.1 }).addTo(map));
-}
-*/
-/**
-* удаление полков врага и запрещенных узлов
-**/
-/*
-function deleteEnemies(){
-	while ( enemyCircle.length != 0 ){
-		map.removeLayer(enemyCircle[0]);
-		delete enemyCircle[0];
-		enemyCircle.splice(0,1);
-	}
-	while ( enemies.length != 0 ){
-		delete enemies[0];
-		enemies.splice(0,1);
-	}
-	while ( restr_nodes.length != 0 ){
-		map.removeLayer(restr_nodes[0]);
-		delete restr_nodes[0];
-		restr_nodes.splice(0,1);
-	}
-}
-*/
-/**
-* запрос запрещенных узлов у сервера и отображение на карте
-**/
-/*
-function getRestrictedNodes(){
-	var params = 'data='+JSON.stringify(enemies);
-	Ajax.sendRequest('GET','/restricted',params,function(dots){
-		for ( var i = 0; i < dots.length; i++ ){
-			restr_nodes.push(L.circle(L.latLng(dots[i][0],dots[i][1]),5,{color:'#e67823'}).addTo(map));
-		}
-	});
-}
-*/
+
+
+
+
 /**
 * запрос маршрута у сервера и отображение маршрута на карте
 **/
@@ -293,9 +233,8 @@ function getRadio(name){
 }
 
 /**
-* проверка связности графа волновым методом
-* вывод несвязной части графа путей
-* @param start начальная точка распостранения волны {lat:lat, lng:lng, radius:radius}
+* получение координаи узла графа, ближайшего к заданной точке 
+* @param point заданная точка {lat:lat, lng:lng}
 **/
 
 function showNearest(point){
@@ -313,4 +252,35 @@ function showNearest(point){
 		nearest = {lat:result.coordinates[1],lng:result.coordinates[0]}
 		nearestPoint = L.marker(L.latLng(nearest.lat,nearest.lng), {draggable:true,icon:nearestIcon}).addTo(map);
 	})
+}
+
+/**
+* определение принадлежности заданной точки к городу 
+* @param point заданная точка {lat:lat, lng:lng}
+**/
+
+function showCity(point){
+    showElem(preloader);
+    Time.start();
+    Route.getCity(point, function(result){
+        hideElem(preloader);
+        time.textContent = Time.stop() + ' мс';
+        time.innerText = Time.stop() + ' мс';
+        //console.log(JSON.stringify(result));
+        if ( result.incity == true ){
+            alert([result.city_name, result.city_lastname].join(","))
+            if (city != null){
+                map.removeLayer(city);
+                city = null;
+            }
+            city = L.geoJson(result.city_geometry).addTo(map);
+        }else{
+            alert('Point is not in city');
+            if (city != null){
+                map.removeLayer(city);
+                city = null;
+            }
+        }
+        
+    });
 }

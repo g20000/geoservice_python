@@ -53,6 +53,37 @@ var Ajax =
         }else{
             XMLHttp.send(null);
         }
+    },
+    
+    /**
+    * отправка запроса
+    * @param method метод запроса
+    * @param url
+    * @param params
+    * callback  
+    **/
+    sendRequestRaw: function(method, url, params, callback){
+        XMLHttp = Ajax.getXMLHttp();
+        if( method == 'GET' || method == 'get' ){
+            url += '?' + params;
+        }
+        XMLHttp.open(method, url, true);
+        XMLHttp.onreadystatechange = function(){
+            if ( XMLHttp.readyState == 4 ){
+                if ( XMLHttp.status == 200 ){
+                    callback(XMLHttp.responseText);
+                }
+                else{
+                    callback(null);
+                }
+            }
+        };
+        if( method == 'POST' || method == 'post' ){
+            XMLHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            XMLHttp.send(params);
+        }else{
+            XMLHttp.send(null);
+        }
     }
     
 };
