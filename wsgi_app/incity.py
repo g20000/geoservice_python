@@ -1,3 +1,4 @@
+#coding=utf-8
 from cgi import parse_qs, escape
 # importing pyspatialite
 from pyspatialite import dbapi2 as db
@@ -6,7 +7,8 @@ import os
 import math
 
 DB_DIR = '/home/user1/game1/db/'
-
+PLACES_DB_FILE = 'places.sqlite'
+MIN_RAST = 0.05
 
 def application(environ, start_response):
     status = '200 OK'
@@ -27,7 +29,7 @@ def application(environ, start_response):
     start_response(status, response_headers)
     return [response]
 
-
+#определение пересечения точки с полигоном города и возврат в случае пересечения имени города и его полигона
 def getCity(point_lat, point_lng, db_file):
     conn = db.connect(DB_DIR + db_file)
     cur = conn.cursor()
@@ -54,4 +56,26 @@ def getCity(point_lat, point_lng, db_file):
     if in_city == 1:
         return (city_name, city_lastname, city_geometry)
     else:
-        return None
+        return getPlace(point_lat, point_lng)
+
+#нахождение населенных пунктов центры которых удалены на расстояние не более заданного от заданной точки
+#в случае нахождения возврат названия и геометрии ближайшего населенного пункта
+def getPlace(point_lat, point_lng):
+	conn = db.connect(DB_DIR + PLACES_DB_FILE)
+	cur = conn.cursor()
+	sql = "SELECT id, place_name, place_type, geometry, lat, lng, country, Distance(GeomFromGeoJSON(geometry), MakePoint("+str(point_lng)+","+str(point_lat)+")) as rast from place where Distance(GeomFromGeoJSON(geometry), MakePoint("+str(point_lng)+","+str(point_lat)+")) < " + str(min_rast)
+	res = cur.execute(sql)
+	places = []
+	for rec in res:
+		place = {}
+		place['id'] = rec[0]
+		place['place_name'] = rec[1].encode('utf-8')
+		place['place_type'] = rec[2].encode('utf-8')
+		place['place_geometry'] = rec[3].encode('utf-8')
+		place['rast'] = rec[7]
+		places.append(place)
+	if len(places) == 0:
+		return None
+	else:
+		places.sort(key = lambda x: x['rast'])
+		return (places[0]['place_name'], places[0]['place_type'], places[0]['place_geometry'])

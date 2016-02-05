@@ -16,7 +16,7 @@ var nearest = null;//объект ближайшей точки
 var point = null;//объект произвольной точки
 var pointPoint = null;//маркер произвольной точки
 var scale = 4; //масштаб сетки (1/4 градуса)
-var city = null; //мультиполигон города
+var city = null; //мультиполигон города(или объекта ландшафта)
 
 var nearestIcon = L.icon({
     iconUrl: 'img/nearest.jpg',
@@ -96,7 +96,7 @@ map.on('click',function(e){
             showCity(point);
         });
         
-    }else{
+    }else if (getRadio('task') == 'nearest'){
         start = null;
         end = null;
         nearest = null;
@@ -122,7 +122,29 @@ map.on('click',function(e){
             nearest = null;
             showNearest(point);
         });
-    }         
+    } else if (getRadio('task') == 'land'){
+        start = null;
+        end = null;
+        nearest = null;
+        point = null;
+        route_line.setLatLngs(dots2latlngs([]));
+        if ( startPoint != null ) map.removeLayer(startPoint);
+        if ( endPoint != null ) map.removeLayer(endPoint);
+        if (nearestPoint != null) map.removeLayer(nearestPoint);
+        if (pointPoint != null) map.removeLayer(pointPoint);
+        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
+        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        //clearAllNodes();
+        //clearAllRoads();
+        showLand(point);
+        pointPoint.on('dragend',function(e){
+            point.lat = pointPoint.getLatLng().lat;
+            point.lng = pointPoint.getLatLng().lng;
+            if (nearestPoint != null) map.removeLayer(nearestPoint);
+            nearest = null;
+            showLand(point);
+        });
+    }        
 });
 
 
@@ -283,3 +305,35 @@ function showCity(point){
         
     });
 }
+
+/**
+* определение принадлежности заданной точки к объекту ландшафта
+* @param point заданная точка {lat:lat, lng:lng}
+**/
+
+function showLand(point){
+    showElem(preloader);
+    Time.start();
+    Route.getLandscape(point, function(result){
+        hideElem(preloader);
+        time.textContent = Time.stop() + ' мс';
+        time.innerText = Time.stop() + ' мс';
+        //console.log(JSON.stringify(result));
+        if ( result.res == true ){
+            alert([result.name, result.sub_type].join(","))
+            if (city != null){
+                map.removeLayer(city);
+                city = null;
+            }
+            city = L.geoJson(result.geometry).addTo(map);
+        }else{
+            alert('landscape objects not found');
+            if (city != null){
+                map.removeLayer(city);
+                city = null;
+            }
+        }
+        
+    });
+}
+
