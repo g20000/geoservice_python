@@ -21,7 +21,7 @@ def application(environ, start_response):
     res = searchObject(point_lat, point_lng, db_file)
     print res
     if res != None:
-        response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + res[1] + '","geometry":' + res[2] + ', "country":"' + res[3] + '", "id":' + str(res[4])+ ', "avg_lat":'+str(res[5])+', "avg_lng":'+str(res[6])+'}'
+        response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + sub_type_filter(res[1]) + '","geometry":' + res[2] + ', "country":"' + res[3] + '", "id":' + str(res[4])+ ', "avg_lat":'+str(res[5])+', "avg_lng":'+str(res[6])+'}'
         
     else:
         response = '{"res":false}'
@@ -64,60 +64,13 @@ def searchObject(point_lat, point_lng, db_file):
 
 
 def sub_type_filter(sub_type):
-    grass = ['grass','forest','cemetery','allotments','meadow','landfill','farmland', 'churchyard','harbour']
-    retail = ['residential','retail','commercial','military','industrial','garages','construction','brownfield','railway
-farmyard
-farmland
-depot
-farm
-beach_resort
-village_green
-quarry
-winter_sports
-abandoned
-religious
-governmental
-port
-
-
-Лес:
-logging
-natural
-
-
-
-
-
-
-
-
-По второй таблице:
-
-
-Поля:
-coastline
-beach
-heath
-grassland
-meadow
-valley
-
-
-
-
-Лес:
-wood
-
-
-
-
-Труднодоступный ландшафт (болота, камни, горы и пр.):
-wetland
-scrub
-mud
-mud
-scree
-rock
-ridge
-sand
-shingle
+    land = {}
+    land['grass'] = ['grass','forest','cemetery','allotments','meadow','farmland', 'churchyard','harbour','coastline','beach','heath','grassland','meadow','valley']
+    land['retail'] = ['residential','retail','commercial','military','industrial','garages','construction','brownfield','railway','farmyard','farmland','depot','farm','beach_resort','village_green','quarry','winter_sports','abandoned','religious','governmental','port']
+    land['wood'] = ['logging','natural', 'wood']
+    land['hard'] = ['wetland','scrub','mud','mud','scree','rock','ridge','sand','shingle','water','landfill']
+    
+    for key, val in land.items():
+        if sub_type in val:
+            return key
+    return 'unknown'
