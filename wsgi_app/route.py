@@ -4,6 +4,7 @@ from pyspatialite import dbapi2 as db
 import time
 import os
 import math
+import sys
 
 DB_DIR = '/home/user1/game1/db/'
 MIN_SIZE_DEFAULT = 1000
