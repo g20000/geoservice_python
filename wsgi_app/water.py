@@ -21,11 +21,12 @@ def application(environ, start_response):
     lng2 = float(data[3])
     db_file = DB_DIR + DB_FILE
     res = getWidthRiver((lat1,lng1), (lat2,lng2), db_file)
-    print res
+    #print res
     if res != None:
         response = json.dumps({"res":True, "waters":res})   
     else:
         response = json.dumps({"res":False})
+    print response
     response_headers = [('Content-type', 'text/html; charset=utf-8'), ('Access-Control-Allow-Origin', '*')]
     start_response(status, response_headers)
     return [response]
@@ -61,8 +62,8 @@ def widthRiver(lat1, lng1, lat2, lng2) :
 
 
 # Код нахождение рек и ширины рек между 2мя юнитами
-# Input: Координаты юнитов в виде пары кортежей (lat1,lng1),(lat2,lng2)
-# Output: json строка типа: {'name_river': {'id':10222, 'width': 200, 'x_cross1':51.05, 'y_cross1':21.05, 'x_cross2': 52.05, 'y_cross2': 22.05 }} Если река без ширины,
+# Input: Координаты юнитов в виде пары кортежей (lat1,lng1),(lat2,lng2), файл базы данных
+# Output: json строка типа: {'id_river': {'id':10222, 'width': 200, 'x_cross1':51.05, 'y_cross1':21.05, 'x_cross2': 52.05, 'y_cross2': 22.05, 'country': 'ukraine', 'geometry': 'geometry JSON string' }, ...} Если река без ширины,
 # возвращает -1 в значении ширины
 def getWidthRiver(unit1, unit2, db_file):
 
@@ -81,18 +82,19 @@ def getWidthRiver(unit1, unit2, db_file):
     # проходит бой юнитов.
     water = 0
     for row in c:
-        water = row[0]
+        water += 1
         if (row[2] == 'riverbank'):
             sql.execute("SELECT AsGeoJSON(Intersection(MakeLine(MakePoint(?,?), MakePoint(?,?)), GeomFromGeoJSON(?)))", (unit1[1], unit1[0], unit2[1], unit2[0], row[3]))
             points = sql.fetchone()
             jdecode = json.loads(points[0])
             point1, point2 = jdecode['coordinates']
             width = widthRiver(point1[1], point1[0], point2[1], point2[0])
-            out[row[0]] = {'id': row[0], 'width': width, 'x_cross1': point1[0], 'y_cross1': point1[1], 'x_cross2': point2[0], 'y_cross2': point2[1], 'country': row[4]}
+            out[row[0]] = {'id': row[0], 'width': width, 'x_cross1': point1[0], 'y_cross1': point1[1], 'x_cross2': point2[0], 'y_cross2': point2[1], 'country': row[4], 'geometry': json.loads(row[3])}
         else:
-            out[row[0]] = {'id': row[0], 'width': -1}
+            out[row[0]] = {'id': row[0], 'width': -1, 'country': row[4], 'geometry': json.loads(row[3])}
     sql.close()
     conn.close()
+    #print out
     if water != 0:
         return out
     else:

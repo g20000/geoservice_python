@@ -3,10 +3,16 @@ body
     background-image: url(/img/bg/2.jpg);
 }
 
+.clr
+{
+    clear: both;
+}
+
 #map-block
 {
 	width: 1024px; 
     height: 768px;
+    float: left;
 }
 
 
@@ -119,17 +125,24 @@ hr
 	clear: both;
 }
 
+.task
+{
+    width: 300px;
+    float: left;
+    padding-top: 200px;
+}
+
 .task input
 {
 	width: 20px;
-	height: 20px;
+	height: 15px;
 }
 
 .task label
 {
 	color: #eee;
 	font-family: Verdana;
-	font-size: 1.5em;
+	font-size: 1.0em;
 }
 
 .title
