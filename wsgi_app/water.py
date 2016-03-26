@@ -26,7 +26,7 @@ def application(environ, start_response):
         response = json.dumps({"res":True, "waters":res})   
     else:
         response = json.dumps({"res":False})
-    print response
+    #print response
     response_headers = [('Content-type', 'text/html; charset=utf-8'), ('Access-Control-Allow-Origin', '*')]
     start_response(status, response_headers)
     return [response]

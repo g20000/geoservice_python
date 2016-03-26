@@ -263,7 +263,7 @@ function showCity(point){
         hideElem(preloader);
         time.textContent = Time.stop() + ' мс';
         time.innerText = Time.stop() + ' мс';
-        console.log(JSON.stringify(result));
+        //console.log(JSON.stringify(result));
         clearCity();
         if ( result.incity == true ){
             alert([result.city_name, result.city_lastname].join(","));
@@ -319,16 +319,14 @@ function showWater(start, end){
         if ( result.res == true ){
             alert(JSON.stringify(result.waters))
             for (waterId in result.waters){
-                /*
+                
                 try{
-                    waters.push(L.geoJson(result.waters[waterId]).addTo(map));
+                    waters.push(L.geoJson(result.waters[waterId].geometry).addTo(map));
                 }catch(e){
-                    alert("Wrong GeoJson!");
+                    //alert("Wrong GeoJson!");
                     console.log("Error:" + e.error + ":" + e.message + ":" + JSON.stringify(result.waters[waterId]));
                 }
-                */
-                water = L.geoJson(result.waters[waterId].geometry).addTo(map);
-                waters.push(water);
+                
             }   
         }else{
             alert('water object was not found');
