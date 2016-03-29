@@ -7,7 +7,7 @@ import os
 import math
 import json
 
-DB_DIR = '/home/user1/game1/db/'
+DB_DIR = '/var/www/bases/'
 DB_FILE = 'water.sqlite'
 
 def application(environ, start_response):

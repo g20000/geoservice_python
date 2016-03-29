@@ -6,7 +6,7 @@ import os
 import math
 import sys
 
-DB_DIR = '/home/user1/game1/db/'
+DB_DIR = '/var/www/bases/'
 MIN_SIZE_DEFAULT = 1000
 
 def application(environ, start_response):

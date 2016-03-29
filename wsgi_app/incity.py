@@ -6,7 +6,7 @@ import time
 import os
 import math
 
-DB_DIR = '/home/user1/game1/db/'
+DB_DIR = '/var/www/bases/'
 PLACES_DB_FILE = 'places.sqlite'
 MIN_RAST = 0.05
 
@@ -14,12 +14,12 @@ def application(environ, start_response):
     status = '200 OK'
     d = parse_qs(environ['QUERY_STRING'])
     data = d['data'][0].split(',')
-    print data
+    #print data
     point_lat = float(data[0])
     point_lng = float(data[1])
     db_file = data[2]
     city = getCity(point_lat, point_lng, db_file)
-    print city
+    #print city
     if city != None:
         response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '","city_geometry":' + city[2] + '}'
         #response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '"}'
@@ -41,7 +41,7 @@ def getCity(point_lat, point_lng, db_file):
         city_geometry = rec[1].strip().encode('utf-8')
         city_name = rec[2].encode('utf-8')
         city_lastname = rec[3].encode('utf-8')
-        print 'cyty_name: '+city_name
+        #print 'cyty_name: '+city_name
         point_geometry = '{"type":"Point","coordinates":[' + str(point_lng) + ',' + str(point_lat) + ']}'
     if id == -1:
         return None
