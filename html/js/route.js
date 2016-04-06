@@ -134,38 +134,38 @@ var Route =
 	    }
 	    return reverse_route;
 	},
-	
+
 	/**
-    * определение принадлежности точки объекту ландшафта
-    * @param start заданная точка {lat:lat, lng:lng}
-    * @param callback функция обратного вызова в которую передается результат
-    **/
-    
-    getLandscape: function(start, callback){
-        var params = 'data=' + [start.lat,start.lng].join(',');
-        console.log(params);
-        var url = Route.geoserver_py+'/land';
-        console.log(url)
-        Ajax.sendRequest('GET', url, params, function(result) {
-            callback(result);
-        });
-    },
-    
-    /**
-    * определение наличия реки между двумя точками
-    * @param start, end заданные точки {lat:lat, lng:lng}
-    * @param callback функция обратного вызова в которую передается результат
-    **/
-    
-    getWater: function(start, end, callback){
-        var params = 'data=' + [start.lat,start.lng,end.lat,end.lng].join(',');
-        console.log(params);
-        var url = Route.geoserver_py+'/water';
-        console.log(url)
-        Ajax.sendRequest('GET', url, params, function(result) {
-            console.log(JSON.stringify(result));
-            callback(result);
-        });
-    }
+	 * определение принадлежности точки объекту ландшафта
+	 * @param start заданная точка {lat:lat, lng:lng}
+	 * @param callback функция обратного вызова в которую передается результат
+	 **/
+
+	getLandscape: function (start, callback) {
+		var params = 'data=' + [start.lat, start.lng].join(',');
+		console.log(params);
+		var url = Route.geoserver_py + '/land';
+		console.log(url)
+		Ajax.sendRequest('GET', url, params, function (result) {
+			callback(result);
+		});
+	},
+
+	/**
+	 * определение наличия реки между двумя точками
+	 * @param start, end заданные точки {lat:lat, lng:lng}
+	 * @param callback функция обратного вызова в которую передается результат
+	 **/
+
+	getWater: function (start, end, callback) {
+		var params = 'data=' + [start.lat, start.lng, end.lat, end.lng].join(',');
+		console.log(params);
+		var url = Route.geoserver_py + '/water';
+		console.log(url)
+		Ajax.sendRequest('GET', url, params, function (result) {
+			console.log(JSON.stringify(result));
+			callback(result);
+		});
+	}
     
 }

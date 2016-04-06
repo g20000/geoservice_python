@@ -36,98 +36,98 @@ map.on('click',function(e){
         clearWaters();
         clearPoint();
         clearNearestPoint();
-        if ( start == null ){
-            start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-            startPoint = L.marker(L.latLng(start.lat,start.lng), {draggable:true}).addTo(map);
-            startPoint.on('dragend',function(e){
+        if (start == null) {
+            start = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+            startPoint = L.marker(L.latLng(start.lat, start.lng), {draggable: true}).addTo(map);
+            startPoint.on('dragend', function (e) {
                 start.lat = startPoint.getLatLng().lat;
                 start.lng = startPoint.getLatLng().lng;
                 showRoute(start, end, enemies);
             });
-        }else if ( end == null ){
-            end = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-            endPoint = L.marker(L.latLng(end.lat,end.lng), { draggable:true}).addTo(map);
-            endPoint.on('dragend',function(e){
+        } else if (end == null) {
+            end = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+            endPoint = L.marker(L.latLng(end.lat, end.lng), {draggable: true}).addTo(map);
+            endPoint.on('dragend', function (e) {
                 end.lat = endPoint.getLatLng().lat;
                 end.lng = endPoint.getLatLng().lng;
                 showRoute(start, end, enemies);
             });
             showRoute(start, end, enemies);
-        }else{
+        } else {
             clearPoints();
             clearRoute();
         }
     }
-    else if (getRadio('task') == 'city'){
+    else if (getRadio('task') == 'city') {
         clearPoints();
         clearRoute();
         clearWaters();
-        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        point = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+        pointPoint = L.marker(L.latLng(point.lat, point.lng), {draggable: true}).addTo(map);
         showCity(point);
-        pointPoint.on('dragend',function(e){
+        pointPoint.on('dragend', function (e) {
             point.lat = pointPoint.getLatLng().lat;
             point.lng = pointPoint.getLatLng().lng;
             clearNearestPoint();
             showCity(point);
         });
-        
-    }else if (getRadio('task') == 'nearest'){
+
+    } else if (getRadio('task') == 'nearest') {
         clearPoints();
         clearCity();
         clearWaters();
         clearRoute();
-        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        point = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+        pointPoint = L.marker(L.latLng(point.lat, point.lng), {draggable: true}).addTo(map);
         showNearest(point);
-        pointPoint.on('dragend',function(e){
+        pointPoint.on('dragend', function (e) {
             point.lat = pointPoint.getLatLng().lat;
             point.lng = pointPoint.getLatLng().lng;
             if (nearestPoint != null) map.removeLayer(nearestPoint);
             nearest = null;
             showNearest(point);
         });
-    } else if (getRadio('task') == 'land'){
+    } else if (getRadio('task') == 'land') {
         clearPoints();
         clearRoute();
         clearCity();
-        point = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-        pointPoint = L.marker(L.latLng(point.lat,point.lng), {draggable:true}).addTo(map);
+        point = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+        pointPoint = L.marker(L.latLng(point.lat, point.lng), {draggable: true}).addTo(map);
         showLand(point);
-        pointPoint.on('dragend',function(e){
+        pointPoint.on('dragend', function (e) {
             point.lat = pointPoint.getLatLng().lat;
             point.lng = pointPoint.getLatLng().lng;
             if (nearestPoint != null) map.removeLayer(nearestPoint);
             nearest = null;
             showLand(point);
         });
-    }  else if (getRadio('task') == 'water'){
+    } else if (getRadio('task') == 'water') {
         clearWaters();
         clearCity();
         clearNearestPoint();
         clearPoint();
-        if ( start == null ){
-            start = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-            startPoint = L.marker(L.latLng(start.lat,start.lng), {draggable:true}).addTo(map);
-            startPoint.on('dragend',function(e){
+        if (start == null) {
+            start = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+            startPoint = L.marker(L.latLng(start.lat, start.lng), {draggable: true}).addTo(map);
+            startPoint.on('dragend', function (e) {
                 start.lat = startPoint.getLatLng().lat;
                 start.lng = startPoint.getLatLng().lng;
                 showWater(start, end);
             });
-        }else if ( end == null ){
-            end = {lat:e.latlng.lat, lng:e.latlng.lng, radius:radius};
-            endPoint = L.marker(L.latLng(end.lat,end.lng), { draggable:true}).addTo(map);
-            endPoint.on('dragend',function(e){
+        } else if (end == null) {
+            end = {lat: e.latlng.lat, lng: e.latlng.lng, radius: radius};
+            endPoint = L.marker(L.latLng(end.lat, end.lng), {draggable: true}).addTo(map);
+            endPoint.on('dragend', function (e) {
                 end.lat = endPoint.getLatLng().lat;
                 end.lng = endPoint.getLatLng().lng;
                 showWater(start, end);
             });
             showWater(start, end);
-        }else{
+        } else {
             clearPoints();
             clearRoute();
         }
-        
+
     }      
 });
 
@@ -143,17 +143,14 @@ function dots2latlngs(dots){
 }//end func
 
 
-
-
-
 /**
 * запрос маршрута у сервера и отображение маршрута на карте
 **/
 
 function showRoute(start,end, enemies){
-	if (start == null || end == null) return false;
+    if (start == null || end == null) return false;
     Route.service = getRadio('service');
-	clearRoute();
+    clearRoute();
 	showElem(preloader);
 	Time.start();
 	Route.getRoute(start,end,enemies,function(route){
@@ -210,7 +207,7 @@ var mapCenter =
 	"kosovo-latest.osm": [42.614833, 20.893836],
 	"mongolia-latest.osm": [47.773702, 106.427558],
 	"pakistan-latest.osm": [30.183729, 71.509366],
-	"ukraine-latest.osm": [50.350146, 30.633554]
+    "ukraine-latest.osm": [50.350146, 30.633554]
 };
 
 /**
@@ -230,8 +227,8 @@ function getRadio(name){
 }
 
 /**
-* получение координаи узла графа, ближайшего к заданной точке 
-* @param point заданная точка {lat:lat, lng:lng}
+ * получение координаи узла графа, ближайшего к заданной точке
+ * @param point заданная точка {lat:lat, lng:lng}
 **/
 
 function showNearest(point){
@@ -252,62 +249,62 @@ function showNearest(point){
 }
 
 /**
-* определение принадлежности заданной точки к городу 
-* @param point заданная точка {lat:lat, lng:lng}
-**/
+ * определение принадлежности заданной точки к городу
+ * @param point заданная точка {lat:lat, lng:lng}
+ **/
 
-function showCity(point){
+function showCity(point) {
     showElem(preloader);
     Time.start();
-    Route.getCity(point, function(result){
+    Route.getCity(point, function (result) {
         hideElem(preloader);
         time.textContent = Time.stop() + ' мс';
         time.innerText = Time.stop() + ' мс';
         //console.log(JSON.stringify(result));
         clearCity();
-        if ( result.incity == true ){
+        if (result.incity == true) {
             alert([result.city_name, result.city_lastname].join(","));
             console.log(JSON.stringify(result.city_geometry));
             city = L.geoJson(result.city_geometry).addTo(map);
-        }else{
+        } else {
             alert('Point is not in city');
         }
-        
+
     });
 }
 
 /**
-* определение принадлежности заданной точки к объекту ландшафта
-* @param point заданная точка {lat:lat, lng:lng}
-**/
+ * определение принадлежности заданной точки к объекту ландшафта
+ * @param point заданная точка {lat:lat, lng:lng}
+ **/
 
-function showLand(point){
+function showLand(point) {
     showElem(preloader);
     Time.start();
-    Route.getLandscape(point, function(result){
+    Route.getLandscape(point, function (result) {
         hideElem(preloader);
         time.textContent = Time.stop() + ' мс';
         time.innerText = Time.stop() + ' мс';
         //console.log(JSON.stringify(result));
         clearCity();
-        if ( result.res == true ){
+        if (result.res == true) {
             alert([result.name, result.sub_type].join(","))
             city = L.geoJson(result.geometry).addTo(map);
-        }else{
+        } else {
             alert('landscape objects not found');
         }
     });
 }
 
 /**
-* определение наличия реки между двумя точками
-* @param start, end заданные точки {lat:lat, lng:lng}
-**/
-function showWater(start, end){
+ * определение наличия реки между двумя точками
+ * @param start, end заданные точки {lat:lat, lng:lng}
+ **/
+function showWater(start, end) {
     if (start == null || end == null) return false;
     showElem(preloader);
     Time.start();
-    Route.getWater(start, end, function(result){
+    Route.getWater(start, end, function (result) {
         hideElem(preloader);
         time.textContent = Time.stop() + ' мс';
         time.innerText = Time.stop() + ' мс';
@@ -316,64 +313,64 @@ function showWater(start, end){
         var water;
         clearWaters();
         clearCity();
-        if ( result.res == true ){
+        if (result.res == true) {
             alert(JSON.stringify(result.waters))
-            for (waterId in result.waters){
-                
-                try{
+            for (waterId in result.waters) {
+
+                try {
                     waters.push(L.geoJson(result.waters[waterId].geometry).addTo(map));
-                }catch(e){
+                } catch (e) {
                     //alert("Wrong GeoJson!");
                     console.log("Error:" + e.error + ":" + e.message + ":" + JSON.stringify(result.waters[waterId]));
                 }
-                
-            }   
-        }else{
+
+            }
+        } else {
             alert('water object was not found');
         }
     });
 }
 
 /**
- *удаление с карты объектов рек 
+ *удаление с карты объектов рек
  **/
-function clearWaters(){
+function clearWaters() {
     var i = 0;
-    while(i < waters.length){
+    while (i < waters.length) {
         map.removeLayer(waters[i]);
-        waters.splice(i,1);
+        waters.splice(i, 1);
         i++;
     }
 }
 
 
 /**
- *удаление с карты объектов города 
+ *удаление с карты объектов города
  **/
-function clearCity(){
-     if (city != null){
+function clearCity() {
+    if (city != null) {
         map.removeLayer(city);
         city = null;
     }
 }
 
 /**
- *удаление с карты линии маршрута 
+ *удаление с карты линии маршрута
  **/
-function clearRoute(){
-     route_line.setLatLngs(dots2latlngs([]));
+function clearRoute() {
+    route_line.setLatLngs(dots2latlngs([]));
 }
 
 /**
- *удаление с карты всех точек 
+ *удаление с карты всех точек
  **/
-function clearPoints(){
+function clearPoints() {
     start = null;
     end = null;
     nearest = null;
     point = null;
-    if ( startPoint != null ) map.removeLayer(startPoint);
-    if ( endPoint != null ) map.removeLayer(endPoint);
+    if (startPoint != null) map.removeLayer(startPoint);
+    if (endPoint != null) map.removeLayer(endPoint);
     if (nearestPoint != null) map.removeLayer(nearestPoint);
     if (pointPoint != null) map.removeLayer(pointPoint);
     startPoint = null;
@@ -383,13 +380,13 @@ function clearPoints(){
 }
 
 /**
- *удаление с карты начальной и конечной точек 
+ *удаление с карты начальной и конечной точек
  **/
-function clearStartEndPoints(){
+function clearStartEndPoints() {
     start = null;
     end = null;
-    if ( startPoint != null ) map.removeLayer(startPoint);
-    if ( endPoint != null ) map.removeLayer(endPoint);
+    if (startPoint != null) map.removeLayer(startPoint);
+    if (endPoint != null) map.removeLayer(endPoint);
     startPoint = null;
     endPoint = null;
 }
@@ -398,8 +395,8 @@ function clearStartEndPoints(){
 /**
  *удаление с карты ближайшей точки
  **/
-function clearNearestPoint(){
-    nearest = null; 
+function clearNearestPoint() {
+    nearest = null;
     if (nearestPoint != null) map.removeLayer(nearestPoint);
     nearestPoint = null;
 }
@@ -407,8 +404,8 @@ function clearNearestPoint(){
 /**
  *удаление с карты произвольной точки
  **/
-function clearPoint(){
-    point = null; 
+function clearPoint() {
+    point = null;
     if (pointPoint != null) map.removeLayer(pointPoint);
     pointPoint = null;
 }

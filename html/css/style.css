@@ -3,8 +3,7 @@ body
     background-image: url(/img/bg/2.jpg);
 }
 
-.clr
-{
+.clr {
     clear: both;
 }
 
@@ -125,8 +124,7 @@ hr
 	clear: both;
 }
 
-.task
-{
+.task {
     width: 300px;
     float: left;
     padding-top: 200px;
@@ -135,14 +133,14 @@ hr
 .task input
 {
 	width: 20px;
-	height: 15px;
+    height: 15px;
 }
 
 .task label
 {
 	color: #eee;
 	font-family: Verdana;
-	font-size: 1.0em;
+    font-size: 1.0em;
 }
 
 .title

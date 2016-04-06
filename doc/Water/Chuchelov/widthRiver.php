@@ -5,7 +5,8 @@
 # Output: json строка типа: {'name_river': {'id':10222, 'width': 200, 'x_cross1':51.05, 'y_cross1':21.05, 'x_cross2': 52.05, 'y_cross2': 22.05 }} Если река без ширины,
 # возвращает -1 в значении ширины
 
-function getWidthRiver($coordinates) {
+function getWidthRiver($coordinates)
+{
 
     $units = json_decode($coordinates);
 
@@ -33,7 +34,7 @@ function getWidthRiver($coordinates) {
 
     while ($river = $rs->fetchArray()) {
         if ($river['sub_type'] == 'riverbank') {
-            $points = $db->query("SELECT AsGeoJSON(Intersection(MakeLine(MakePoint(". $unit_1 ."), MakePoint(". $unit_2 .")), GeomFromGeoJSON('" . $river['json'] . "')))");
+            $points = $db->query("SELECT AsGeoJSON(Intersection(MakeLine(MakePoint(" . $unit_1 . "), MakePoint(" . $unit_2 . ")), GeomFromGeoJSON('" . $river['json'] . "')))");
             $row = $points->fetchArray();
             $jdecode = json_decode($row[0]);
             $i = 0;
@@ -63,15 +64,16 @@ function getWidthRiver($coordinates) {
 }
 
 # Функция расчета ширины реки
-function widthRiver($lat1, $lng1, $lat2, $lng2) {
+function widthRiver($lat1, $lng1, $lat2, $lng2)
+{
 
 #Coordinates to radian
     $pi = 3.14;
     $EARTH_RADIUS = 6372795;
-    $rLat1 = $lat1 * $pi /180;
-    $rLat2 = $lat2 * $pi /180;
-    $rLng1 = $lng1 * $pi /180;
-    $rLng2 = $lng2 * $pi /180;
+    $rLat1 = $lat1 * $pi / 180;
+    $rLat2 = $lat2 * $pi / 180;
+    $rLng1 = $lng1 * $pi / 180;
+    $rLng2 = $lng2 * $pi / 180;
 
 #Cosinus and sinus coordinates
     $cLat1 = cos($rLat1);
@@ -84,7 +86,7 @@ function widthRiver($lat1, $lng1, $lat2, $lng2) {
 
 #length from coordinates
 
-    $x = sqrt(pow($cLat2 * $sDelta, 2) + pow($cLat1 * $sLan2 - $sLan1 * $cLat2 * $cDelta,2));
+    $x = sqrt(pow($cLat2 * $sDelta, 2) + pow($cLat1 * $sLan2 - $sLan1 * $cLat2 * $cDelta, 2));
     $y = ($sLan1 * $sLan2 + $cLat1 * $cLat2 * $cDelta);
 
     $width = atan($x / $y) * $EARTH_RADIUS;
@@ -93,6 +95,6 @@ function widthRiver($lat1, $lng1, $lat2, $lng2) {
 }
 
 #Test
-$arr = json_encode([[20.931325,52.268881], [21.023444,52.498865]]);
+$arr = json_encode([[20.931325, 52.268881], [21.023444, 52.498865]]);
 $test = getWidthRiver($arr);
 echo $test;
