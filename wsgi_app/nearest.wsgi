@@ -5,7 +5,7 @@ import time
 import os
 import math
 
-DB_DIR = '/var/www/sqlite/'
+DB_DIR = '/var/www/bases/'
 MIN_SIZE_DEFAULT = 1000
 
 def application(environ, start_response):
