@@ -47,7 +47,8 @@ def getRoute(start,end,db_file,scale):
 		result = row[0]		
 	cur.close()
 	conn.close()
-	return result+'='+DB_DIR+'='+config.HOSTNAME
+	return result
+#+'='+DB_DIR+'='+config.HOSTNAME
 
 #calculating sector by coordinates
 def latlng2sector(lat,lng,scale):
