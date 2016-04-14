@@ -1,5 +1,10 @@
-import os
-ENV = os.getenv('ENV', 'development')
+import socket
+HOSTNAME = socket.gethostname()
+if HOSTNAME == 'waronmap.com':
+    ENV = 'production'
+else:
+    ENV = 'development'
+
 if ENV == 'production':
     DB_DIR = '/mnt/bases/'
 else:
