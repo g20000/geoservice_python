@@ -7,7 +7,13 @@ import os
 import math
 import json
 
-DB_DIR = '/var/www/bases/'
+import sys
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
+import config
+
+DB_DIR = config.DB_DIR
 DB_FILE = 'water.sqlite'
 
 def application(environ, start_response):

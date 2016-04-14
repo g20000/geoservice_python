@@ -6,7 +6,12 @@ import os
 import math
 import sys
 
-DB_DIR = '/var/www/bases/'
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
+import config
+
+DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
 def application(environ, start_response):
