@@ -37,6 +37,9 @@ Python 2.7.xx - обычно уже установлен в системе
             Allow from all
             </Directory>
 
+				#use "production" for production
+				SetEnv ENV dev
+
                 WSGIScriptAlias /route /home/user1/www/geoservice_python/wsgi_app/route.py
                 WSGIScriptAlias /nearest /home/user1/www/geoservice_python/wsgi_app/nearest.py
                 WSGIScriptAlias /incity /home/user1/www/geoservice_python/wsgi_app/incity.py

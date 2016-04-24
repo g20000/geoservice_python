@@ -6,7 +6,12 @@ import os
 import math
 import sys
 
-DB_DIR = '/var/www/bases/'
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
+import config
+
+DB_DIR = config.DB_DIR
 MIN_SIZE_DEFAULT = 1000
 
 def application(environ, start_response):
@@ -43,6 +48,7 @@ def getRoute(start,end,db_file,scale):
 	cur.close()
 	conn.close()
 	return result
+#+'='+DB_DIR+'='+config.HOSTNAME
 
 #calculating sector by coordinates
 def latlng2sector(lat,lng,scale):

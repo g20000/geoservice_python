@@ -6,7 +6,13 @@ import time
 import os
 import math
 
-DB_DIR = '/var/www/bases/'
+import sys
+abspath = os.path.dirname(__file__)
+sys.path.append(abspath)
+os.chdir(abspath)
+import config
+
+DB_DIR = config.DB_DIR
 PLACES_DB_FILE = 'places.sqlite'
 MIN_RAST = 0.05
 
