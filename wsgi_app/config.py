@@ -1,6 +1,6 @@
 import socket
 HOSTNAME = socket.gethostname()
-if HOSTNAME == 'testvm':
+if HOSTNAME == 'testvm' || HOSTNAME == 'vbiznese':
     ENV = 'production'
 else:
     ENV = 'development'
