@@ -28,7 +28,7 @@ def application(environ, start_response):
     city = getCity(point_lat, point_lng, db_file)
     #print city
     if city != None:
-        response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '","city_geometry":' + city[2] + '}'
+        response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '","city_geometry":' + city[2] + ',"id":'+ str(city[3]) +'}'
         #response = '{"incity":true, "city_name":"' + city[0] + '", "city_lastname":"' + city[1] + '"}'
     else:
         response = '{"incity":false}'
@@ -61,9 +61,9 @@ def getCity(point_lat, point_lng, db_file):
     cur.close()
     conn.close()
     if in_city == 1:
-        return (city_name, city_lastname, city_geometry)
+        return (city_name, city_lastname, city_geometry, id)
     else:
-        return getPlace(point_lat, point_lng)
+        return None
 
 #нахождение населенных пунктов центры которых удалены на расстояние не более заданного от заданной точки
 #в случае нахождения возврат названия и геометрии ближайшего населенного пункта

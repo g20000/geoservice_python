@@ -39,7 +39,8 @@ def getNearest(point,db_file,scale):
 	cur = conn.cursor()
 	id_point = getNodeId(cur,point,scale)
 	sql = 'SELECT AsGeoJSON(geometry) AS geometry FROM roads_nodes WHERE node_id='+str(id_point)+' LIMIT 1'
-	rs = cur.execute(sql)	
+	#print sql
+	rs = cur.execute(sql)
 	for row in rs:
 		result = row[0]		
 	cur.close()
