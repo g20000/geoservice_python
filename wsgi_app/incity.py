@@ -13,6 +13,7 @@ os.chdir(abspath)
 import config
 
 DB_DIR = config.DB_DIR
+CITY_DB_FILE = 'city.sqlite'
 PLACES_DB_FILE = 'places.sqlite'
 MIN_RAST = 0.05
 
@@ -23,7 +24,7 @@ def application(environ, start_response):
     #print data
     point_lat = float(data[0])
     point_lng = float(data[1])
-    db_file = data[2]
+    db_file = CITY_DB_FILE
     city = getCity(point_lat, point_lng, db_file)
     #print city
     if city != None:
