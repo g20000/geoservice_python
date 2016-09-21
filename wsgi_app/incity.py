@@ -48,22 +48,22 @@ def getCity(point_lat, point_lng, db_file):
         city_geometry = rec[1].strip().encode('utf-8')
         city_name = rec[2].encode('utf-8')
         city_lastname = rec[3].encode('utf-8')
-        #print 'cyty_name: '+city_name
+        #print 'city_name: '+city_name
         point_geometry = '{"type":"Point","coordinates":[' + str(point_lng) + ',' + str(point_lat) + ']}'
-    if id == -1:
-        return None
-    sql = "SELECT Intersects(GeomFromGeoJSON('" + city_geometry + "'),GeomFromGeoJSON('" + point_geometry + "'))"
-    res = cur.execute(sql)
-    in_city = 0
-    for rec in res:
-        print 'rec=' + str(rec)
-        in_city = rec[0]
+        if id != -1:
+            sql = "SELECT Intersects(GeomFromGeoJSON('" + city_geometry + "'),GeomFromGeoJSON('" + point_geometry + "'))"
+            res2 = cur.execute(sql)
+            in_city = 0
+            for rec2 in res2:
+                print 'rec=' + str(rec2)
+                in_city = rec2[0]
+                if in_city == 1:
+                    cur.close()
+                    conn.close()
+                    return (city_name, city_lastname, city_geometry, id)
     cur.close()
     conn.close()
-    if in_city == 1:
-        return (city_name, city_lastname, city_geometry, id)
-    else:
-        return None
+    return None
 
 #нахождение населенных пунктов центры которых удалены на расстояние не более заданного от заданной точки
 #в случае нахождения возврат названия и геометрии ближайшего населенного пункта
