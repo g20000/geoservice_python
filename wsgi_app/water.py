@@ -93,7 +93,7 @@ def getWidthRiver(unit1, unit2, db_file):
             sql.execute("SELECT AsGeoJSON(Intersection(MakeLine(MakePoint(?,?), MakePoint(?,?)), ?))", (unit1[1], unit1[0], unit2[1], unit2[0], row[5]))
             points = sql.fetchone()
             jdecode = json.loads(points[0])
-            point1, point2 = jdecode['coordinates']
+            point1, point2 = jdecode['coordinates'][0:2]
             width = widthRiver(point1[1], point1[0], point2[1], point2[0])
             out[row[0]] = {'id': row[0], 'width': width, 'x_cross1': point1[0], 'y_cross1': point1[1], 'x_cross2': point2[0], 'y_cross2': point2[1], 'country': row[4], 'geometry': json.loads(row[3])}
         else:
