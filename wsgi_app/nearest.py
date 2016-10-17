@@ -18,31 +18,31 @@ def application(environ, start_response):
 	status = '200 OK'
 	d = parse_qs(environ['QUERY_STRING'])
 	data = d['data'][0].split(',')
-	print data
+	#print data
 	point_lat = float(data[0])
-	point_lng = float(data[1])	
+	point_lng = float(data[1])
 	filename = data[2]
 	scale = int(data[3])
 	db_file = searchBestDbFile((point_lat,point_lng),filename)
-	print 'using db_file='+db_file
-	nearest = getNearest((point_lat,point_lng),db_file,scale)	
-	response = "".join([str(nearest)])	
-	response_headers = [('Content-type', 'text/html'),('Access-Control-Allow-Origin','*'),('Content-Length',str(len(response)))]	
+	#print 'using db_file='+db_file
+	nearest = getNearest((point_lat,point_lng),db_file,scale)
+	response = "".join([str(nearest)])
+	response_headers = [('Content-type', 'text/html'),('Access-Control-Allow-Origin','*'),('Content-Length',str(len(response)))]
 	start_response(status, response_headers)
 	return [response]
 
 def getNearest(point,db_file,scale):
 	# creating/connecting the db
-	#print 'db_file='+db_file	
+	#print 'db_file=%s' % str(db_file)
 	conn = db.connect(DB_DIR + db_file)
 	# creating a Cursor
 	cur = conn.cursor()
 	id_point = getNodeId(cur,point,scale)
-	sql = 'SELECT AsGeoJSON(geometry) AS geometry FROM roads_nodes WHERE node_id='+str(id_point)+' LIMIT 1'
+	#print 'id_point=%s' % str(id_point)
+	cur.execute("SELECT AsGeoJSON(geometry) AS geometry FROM roads_nodes WHERE node_id=? LIMIT 1",(id_point,))
 	#print sql
-	rs = cur.execute(sql)
-	for row in rs:
-		result = row[0]		
+	row = cur.fetchone()
+	result = row[0]
 	cur.close()
 	conn.close()
 	return result
@@ -55,25 +55,25 @@ def latlng2sector(lat,lng,scale):
 	return sector
 
 def getNodeId(cur,point,scale):
-	#sql = 'select node_id, MIN(Distance(geometry,MakePoint('+str(start[1])+','+str(start[0])+'))) as rast from roads_nodes'	
+	#sql = 'select node_id, MIN(Distance(geometry,MakePoint('+str(start[1])+','+str(start[0])+'))) as rast from roads_nodes'
 	sector = latlng2sector(point[0],point[1],scale)
 	print 'sector=%i' % sector
 	try:
-		sql = 'select node_id, MIN(Pow(('+str(point[1])+'-X(geometry)),2) +Pow(('+str(point[0])+'-Y(geometry)),2)) as rast from roads_nodes where connected=1 and sector='+str(sector)
-		rs = cur.execute(sql)	
+		cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from roads_nodes where connected=1 and sector=?",(point[1], point[0], sector))
+		row = cur.fetchone()
+		if row[0] is None:
+			cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from roads_nodes where sector=?",(point[1],point[0],sector))
+			row = cur.fetchone()
+			if row[0] is None:
+				cur.execute("select node_id, MIN(Pow((?-X(geometry)),2) +Pow((?-Y(geometry)),2)) as rast from roads_nodes",(point[1],point[0]))
+				row = cur.fetchone()
+				if row[0] is None:
+					return None
 	except:
-		print 'Except: without using "connected" '
-		try:
-			sql = 'select node_id, MIN(Pow(('+str(point[1])+'-X(geometry)),2) +Pow(('+str(point[0])+'-Y(geometry)),2)) as rast from roads_nodes where sector='+str(sector)
-			rs = cur.execute(sql)
-		except:
-			print 'Ecxcept: without using "connected and "sector"'
-			sql = 'select node_id, MIN(Pow(('+str(point[1])+'-X(geometry)),2) +Pow(('+str(point[0])+'-Y(geometry)),2)) as rast from roads_nodes'
-			rs = cur.execute(sql)
-	node_id = 0
-	for row in rs:
+		return None
+	else:
 		node_id = row[0]
-	return node_id
+		return node_id
 
 def searchBestDbFile(point,db_file):
 	global DB_DIR
@@ -95,7 +95,7 @@ def isInside(filename,point):
 	if isPointInside(boundary, point):
 		return True
 	return False
-	
+
 def isPointInside(b, point):
 	if len(b) == 0:
 		return True
@@ -116,7 +116,7 @@ def getBoundaryFromName(name):
 	boundary['bottom'] = float(ls[2])
 	boundary['right'] = float(ls[3])
 	return boundary
-	
+
 def getAreaSize(filename):
 	boundary = getBoundaryFromName(filename)
 	if len(boundary) == 0:
