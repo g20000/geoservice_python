@@ -27,7 +27,7 @@ def application(environ, start_response):
     res = searchObject(point_lat, point_lng, db_file)
     print res
     if res != None:
-        response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + sub_type_filter(res[1]) + '","geometry":' + res[2] + ', "country":"' + res[3] + '", "id":' + str(res[4])+ ', "avg_lat":'+str(res[5])+', "avg_lng":'+str(res[6])+'}'
+        response = '{"res":true, "name":"' + res[0] + '", "sub_type":"' + res[1] + '","geometry":' + res[2] + ', "country":"' + res[3] + '", "id":' + str(res[4])+ ', "avg_lat":'+str(res[5])+', "avg_lng":'+str(res[6])+'}'
         
     else:
         response = '{"res":false}'
