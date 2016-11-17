@@ -8,20 +8,23 @@ var Route =
 	geoserver_py: 'http://geoserver.py:8080',
 	geoserver_php: 'http://php_spa.loc',
 	geoserver_node: 'http://127.0.0.1:8000',
+	directionsService: new google.maps.DirectionsService(),
 	
 	/**функция получения маршрутов
     * @param start, end начальная и конечная точки в виде {lat:lat, lng:lng}
 	* @param enemies объекты описывающие юнитов противника в виде [{lat:lat, lng:lng, radius:radius}, ...]
     * @param callback функция обратного вызова в которую передается результат
     **/
-    getRoute: function(start,end,enemies,callback){   
+    getRoute: function(start,end,enemies,callback){
 		if(Route.service == 'spatialite_php' ){
 			Route.getRouteSpatialitePHP(start,end,callback);
 		}else if(Route.service == 'spatialite_python' ){
 			Route.getRouteSpatialitePython(start,end,callback);
 		}else if ( Route.service == 'spatialite_nodejs' ){
             Route.getRouteSpatialiteNodeJs(start,end,callback);
-        }else{
+        }else if ( Route.service == 'google' ) {
+			Route.getRouteGoogle(start, end, callback);
+		}else{
 			callback([]);
 		}
 	},
@@ -49,6 +52,7 @@ var Route =
     **/
     
     getRouteSpatialitePython: function(start,end,callback){
+		console.log('spatialite python');
 		var db_file = selectRegion.value;
 		var bounds = map.getBounds();
 		var params = 'data=' + [start.lat,start.lng,end.lat,end.lng,db_file, scale].join(',');
@@ -79,10 +83,42 @@ var Route =
             callback(Route.reverse(route));
 		});
 	},
-    
-   
 
-	
+	/**получение маршрута с сервиса маршрутов Google через JS API
+	 * @param start точка куда двигаться [lat,lng]
+	 * @param end точка откуда двигаться [lat,lng]
+	 * @param callback объект в который передается маршрут в виде массива точек
+	 **/
+	getRouteGoogle: function(start,end,callback){
+		var start = new google.maps.LatLng(start.lat, start.lng);
+		var end = new google.maps.LatLng(end.lat, end.lng);
+		var request = {
+			origin: start,
+			destination: end,
+			//задание путевой точки
+			//waypoints: [{location: new google.maps.LatLng(56.64,47.82 ), stopover: false}],
+			travelMode: google.maps.TravelMode.DRIVING
+		};
+		Route.directionsService.route(request, function(response, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				var points = response.routes[0].overview_path;
+				/*
+				var liters = [];
+				for ( var key in points[0]){
+					liters.push(key);
+					if (liters.length >1 ) break;
+				}
+				*/
+				var route = [];
+				for ( var i = 0; i < points.length; i++ ){
+					route.push([points[i].lat(),points[i].lng()]);
+				}
+				callback(route);
+			}
+		});
+	},
+
+
 	/**
     * получение узла, ближайшего к заданной точке
     * @param start, end начальная и конечная точки в виде {lat:lat, lng:lng}

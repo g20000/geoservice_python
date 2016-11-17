@@ -10,12 +10,14 @@
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 	<script src="js/lib/leaflet-providers.js"></script>
 	<script src="js/lib/google_tiles.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+	<!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyBNMmlRGBpvXMQNw4CW7NwuMzb0XeUrTV4"></script>
     <script type="text/javascript" src="js/ajax.js"></script>
     <script type="text/javascript" src="js/route.js"></script>
 	<script type="text/javascript" src="js/helper.js"></script>
 	<script type="text/javascript" src="js/time.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
+
 </head>
     <body>
 		<h4 class="title">
@@ -23,7 +25,7 @@
 			<input type="radio" name="service" value="spatialite_python" checked/><label>Python</label>&nbsp;
 			<input type="radio" name="service" value="spatialite_php" /><label>PHP</label>&nbsp;
 			<input type="radio" name="service" value="spatialite_nodejs"/><label>NodeJs</label>&nbsp;
-			
+			<input type="radio" name="service" value="google"/><label>Google</label>&nbsp;
 		</h4>
 		<div id="map-block"></div>
 		<div class="task" >
